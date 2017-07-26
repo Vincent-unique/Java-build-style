@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="io-style" basedir="./" default="main">
+    <property name="version" value="0.0.1"/>
+    <property name="vendor" value="trump"/>
+    <property name="src.dir" value="./src/main/java/"/>
+    <property name="build.dir" value="./build-ant/"/>
+    <property name="classes.dir" value="${build.dir}/classes/"/>
+    <property name="archive.dir" value="${build.dir}/archive/"/>
+    <property name="main-class" value="org.trump.vincent.Application"/>
+    <property name="lib.dir" value="./libs/"/>
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+
+
+    <!--Tasks to build -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="compile" depends="clean">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" classpathref="classpath" destdir="${classes.dir}"/>
+        <copy todir="${classes.dir}">
+            <fileset dir="${src.dir}" excludes="**/*.jar"/>
+            <fileset dir="${src.dir}../resources" excludes=""/>
+        </copy>
+    </target>
+
+    <target name="archive-jar" depends="compile">
+        <jar basedir="${classes.dir}" destfile="${archive.dir}/${ant.project.name}.jar">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+                <attribute name="Vendor" value="${vendor}"/>
+                <attribute name="version" value="${version}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="archive-jar">
+        <java jar="${archive.dir}/${ant.project.name}.jar" fork="true"/>
+    </target>
+
+    <target name="main" depends="archive-jar"/>
+
+    <target name="run2" depends="archive-jar">
+        <java fork="true" classname="${main-class}">
+            <classpath>
+                <path refid="classpath"/>
+                <path location="${archive.dir}/${ant.project.name}.jar"/>
+            </classpath>
+        </java>
+    </target>
+
+</project>

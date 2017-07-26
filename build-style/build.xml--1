@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project>
+    <target name="clean">
+        <delete dir="./build-ant/"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="./build-ant/classes/"/>
+        <javac srcdir="./src/main/java/" destdir="./build-ant/classes/"/>
+    </target>
+
+    <target name="jar">
+        <mkdir dir="./build-ant/jar/"/>
+        <jar destfile="build-ant/jar/App.jar" basedir="./build-ant/classes/">
+            <manifest>
+                <attribute name="Main-Class" value="org.trump.vincent.Application"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run">
+        <java jar="./build-ant/jar/App.jar" fork="true"/>
+    </target>
+
+    <!-- 合并——集中构建任务 -->
+    <target name="build">
+        <delete dir="./build-ant/"/>
+
+        <mkdir dir="./build-ant/classes"/>
+        <javac srcdir="./src/main/java/" destdir="./build-ant/classes/"/>
+
+        <mkdir dir="./build-ant/jar/"/>
+        <jar destfile="./build-ant/jar/App.jar" basedir="./build-ant/classes/">
+            <manifest>
+                <attribute name="Main-Class" value="org.trump.vincent.Application"/>
+            </manifest>
+        </jar>
+    </target>
+</project>
